@@ -1,0 +1,2 @@
+config DT_T31_SWAN
+	bool "t31 swan"
