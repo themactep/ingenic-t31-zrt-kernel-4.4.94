@@ -5,6 +5,7 @@ dtb-$(CONFIG_DT_SEAL)	+= seal.dtb
 dtb-$(CONFIG_DT_X2000_V12_FPGA)	+= x2000_v12_fpga.dtb
 dtb-$(CONFIG_DT_T40_SHARK)	+= shark.dtb
 dtb-$(CONFIG_DT_T31_SWAN)	+= swan.dtb
+dtb-$(CONFIG_DT_T31_PERSONALCAM)	+= personalcam.dtb
 
 obj-y				+= $(patsubst %.dtb, %.dtb.o, $(dtb-y))
 
