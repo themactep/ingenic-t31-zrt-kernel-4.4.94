@@ -80,7 +80,7 @@
 };
 
 &msc1 {
-	status = "disabled";
+	status = "okay";
 	pinctrl-names = "default";
 	/*mmc-hs200-1_8v;*/
 	cap-mmc-highspeed;
@@ -88,11 +88,11 @@
 	bus-width = <4>;
 	voltage-ranges = <2900 3100>;
 
-	ingenic,sdio_clk = <24000000>;
+	//ingenic,sdio_clk = <24000000>;
 
-	ingenic,removal-nonremovable = <1>;
+	ingenic,removal-dontcare = <1>;
 	/* special property */
-	ingenic,sdio-reset = <&gpb 25 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+	//ingenic,sdio-reset = <&gpb 25 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
 	ingenic,wp-gpios = <0>;
 	ingenic,rst-gpios = <0>;
 	pinctrl-0 = <&msc1_pb>;
@@ -123,6 +123,10 @@
 	ingenic,allow_cs_same = <1>;
 	ingenic,bus_num = <0>;
 	ingenic,has_dma_support = <1>;
+};
+
+&isp {
+	status = "okay";
 };
 
 &otg {
