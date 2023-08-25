@@ -50,5 +50,8 @@ if FB || SGI_NEWPORT_CONSOLE
 
 endif
 
+if SOC_T40 || SOC_T31
+source "drivers/video/avpu/Kconfig"
+endif
 
 endmenu

@@ -7,6 +7,7 @@ obj-y				         += backlight/
 obj-y				         += fbdev/
 
 obj-$(CONFIG_JZ_IPU)         += ingenic_ipu/
+obj-$(CONFIG_AVPU_DRIVER)          += avpu/
 
 obj-$(CONFIG_VIDEOMODE_HELPERS) += display_timing.o videomode.o
 ifeq ($(CONFIG_OF),y)
