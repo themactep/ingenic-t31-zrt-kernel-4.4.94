@@ -52,6 +52,9 @@ endif
 
 if SOC_T40 || SOC_T31
 source "drivers/video/avpu/Kconfig"
+source "drivers/video/ingenic_sinfo/Kconfig"
+source "drivers/video/ingenic_sensors/Kconfig"
+source "drivers/video/ingenic_isp/Kconfig"
 endif
 
 endmenu

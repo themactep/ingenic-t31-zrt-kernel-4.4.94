@@ -1,0 +1,5 @@
+config INGENIC_ISP
+	tristate "ISP 3.x kernel module port"
+	default m
+	help
+	  Enables the kernel 3.x ISP module port.

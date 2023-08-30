@@ -1,0 +1,12 @@
+menuconfig INGENIC_SENSORS
+	tristate "Ingenic Sensor modules for the TX-ISP"
+	default m
+	help
+	  Support for Ingenic Sensors.
+
+config INGENIC_SENSOR_GC2053
+	tristate "Ingenic Sensor module for GC2053"
+	depends on INGENIC_SENSORS
+	default m
+	help
+	  Module for gc2053.
