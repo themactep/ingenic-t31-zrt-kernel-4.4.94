@@ -1,0 +1,11 @@
+
+if SND_MIPS
+
+config SND_INGENIC_OSS3_AUDIO
+	tristate "Ingenic OSS3 Audio"
+	depends on SOC_T31
+	select SND_PCM
+	help
+			Sound support for the Ingenic socs that support OSS3.
+endif	# SND_MIPS
+
