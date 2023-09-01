@@ -30,7 +30,7 @@
 #include "asoc-dmic.h"
 #include "asoc-aic.h"
 
-static int ingenic_dmic_debug = 0;
+static int ingenic_dmic_debug = 1;
 module_param(ingenic_dmic_debug, int, 0644);
 #define DMIC_DEBUG_MSG(msg...)			\
 	do {					\
@@ -407,9 +407,11 @@ static int ingenic_dmic_platfrom_probe(struct platform_device *pdev)
 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
 	if (!res)
 		return -ENOENT;
-	if (!devm_request_mem_region(&pdev->dev,
-				res->start, resource_size(res),pdev->name))
+	/*if (!devm_request_mem_region(&pdev->dev,
+				res->start, resource_size(res),pdev->name)) {
+		dev_err(&pdev->dev, "Failed to request memory region (size %x, start %p, name %s)\n", resource_size(res), res->start, pdev->name);
 		return -EBUSY;
+	}*/
 
 	ingenic_dmic->res_start = res->start;
 	ingenic_dmic->res_size = resource_size(res);
@@ -437,17 +439,17 @@ static int ingenic_dmic_platfrom_probe(struct platform_device *pdev)
 		dev_err(&pdev->dev, "Failed to get clock: %d\n", ret);
 		return ret;
 	}
-//	clk_prepare_enable(ingenic_dmic->clk_gate_dmic);
-//	__dmic_enable(&pdev->dev);
-//	printk("XXXXXXXXXXXXXXXXXXXXcgu-i2s%x\n",*(volatile unsigned int*)0xb0000060);
-//	printk("XXXXXXXXXXXXXXXXXXXXgate-dmic%x\n",*(volatile unsigned int*)0xb0000020);
-//	ingenic_dmic->dmic_enable = clk_get(&pdev->dev, "dmic_enable");
-//	if (IS_ERR_OR_NULL(ingenic_dmic->dmic_enable)) {
-//		ret = PTR_ERR(ingenic_dmic->dmic_enable);
-//		ingenic_dmic->dmic_enable = NULL;
-//		dev_err(&pdev->dev, "Failed to get clock: %d\n", ret);
-//		return ret;
-//	}
+	/*clk_prepare_enable(ingenic_dmic->clk_gate_dmic);
+	__dmic_enable(&pdev->dev);
+	printk("XXXXXXXXXXXXXXXXXXXXcgu-i2s%x\n",*(volatile unsigned int*)0xb0000060);
+	printk("XXXXXXXXXXXXXXXXXXXXgate-dmic%x\n",*(volatile unsigned int*)0xb0000020);
+	ingenic_dmic->dmic_enable = clk_get(&pdev->dev, "dmic_enable");
+	if (IS_ERR_OR_NULL(ingenic_dmic->dmic_enable)) {
+		ret = PTR_ERR(ingenic_dmic->dmic_enable);
+		ingenic_dmic->dmic_enable = NULL;
+		dev_err(&pdev->dev, "Failed to get clock: %d\n", ret);
+		return ret;
+	}*/
 
 	ret = snd_soc_register_codec(&pdev->dev,
 					&soc_codec_dev_dmic_codec, &dmic_codec_dai, 1);
@@ -455,7 +457,7 @@ static int ingenic_dmic_platfrom_probe(struct platform_device *pdev)
 					 &ingenic_dmic_dai, 1);
 	if (ret)
 		goto err_register_cpu_dai;
-	dev_dbg(&pdev->dev, "dmic platform probe success\n");
+	dev_info(&pdev->dev, "dmic platform probe success\n");
 
 	ret = ingenic_dma_pcm_register(&pdev->dev, NULL);
 

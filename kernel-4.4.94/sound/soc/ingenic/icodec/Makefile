@@ -1,3 +1,4 @@
 
 obj-$(CONFIG_SND_ASOC_INGENIC_DUMP_CODEC) += dump.o
 obj-$(CONFIG_SND_ASOC_INGENIC_ICDC_D3) += icdc_d3.o
+obj-$(CONFIG_SND_ASOC_INGENIC_INTERNAL_T10) += internal_t10.o

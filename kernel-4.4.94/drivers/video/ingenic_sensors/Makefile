@@ -4,8 +4,6 @@ ifeq ($(CONFIG_SOC_T31),y)
 SOC := t31
 else ifeq ($(CONFIG_SOC_T41),y)
 SOC := t41
-else
-error "No SOC"
 endif
 
 obj-$(CONFIG_INGENIC_SENSOR_GC2053)        += $(SOC)/gc2053/gc2053.o

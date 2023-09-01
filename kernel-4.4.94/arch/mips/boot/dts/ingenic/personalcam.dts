@@ -36,6 +36,18 @@
 	status = "okay";
 };
 
+&aic {
+	status = "okay";
+};
+
+&dmic {
+	status = "okay";
+};
+
+&codec {
+	status = "okay";
+};
+
 &cpufreq {
 	status = "okay";
 	operating-points = <
@@ -216,5 +228,65 @@
 			gpios = <&gpc 1 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
 		};
 
+	};
+
+	dump_dmic_codec:dump_dmic_codec{
+		compatible = "ingenic,dmic-dump-codec";
+		status = "ok";
+	};
+	dump_spdif_codec:dump_spdif_codec{
+		compatible = "ingenic,spdif-dump-codec";
+		status = "ok";
+	};
+	dump_pcm_codec:dump_pcm_codec{
+		compatible = "ingenic,pcm-dump-codec";
+		status = "ok";
+	};
+
+	/*sound {
+		compatible = "simple-audio-card";
+
+		status = "okay";
+
+		simple-audio-card,name = "t31-sound-thing";
+		simple-audio-card,format = "i2s";
+
+		simple-audio-card,widgets =
+			"Speaker", "Speaker",
+			"Microphone", "Mic Buildin",
+			"Microphone", "DMic";
+		simple-audio-card,routing =
+			"Microphone", "DMic";
+		//simple-audio-card,pin-switches = "Speaker";
+
+		//simple-audio-card,hp-det-gpio = <&gpd 16 GPIO_ACTIVE_LOW>;
+		//simple-audio-card,aux-devs = <&amp>;
+
+		simple-audio-card,bitclock-master = <&dai_dmic_codec>;
+		simple-audio-card,frame-master = <&dai_dmic_codec>;
+
+		dai_cpu: simple-audio-card,cpu {
+			sound-dai = <&i2s0>;
+		};
+
+		dai_dmic_codec: simple-audio-card,codec {
+			sound-dai = <&dmic>;
+		};
+
+	};*/
+	sound_t31_internal_codec {
+		status = "ok";
+		compatible = "ingenic,t31-sound";
+		ingenic,model = "t31";
+
+		ingenic,dai-link = "i2s-icdc", "dmic";
+		ingenic,stream = "Playback", "Capture";
+		ingenic,cpu-dai = <&i2s0>, <&dmic>;
+		ingenic,platform = <&aic>, <&dmic>;
+		ingenic,codec = <&codec>, <&dump_dmic_codec>;
+		ingenic,codec-dai = "icdc-d3-hifi", "dmic-dump";
+		ingenic,audio-routing = "Speaker", "SPK",
+			"DMIC", "DMic";
+		//ingenic,spken-gpio = <&gpb 0 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
 	};
 };
