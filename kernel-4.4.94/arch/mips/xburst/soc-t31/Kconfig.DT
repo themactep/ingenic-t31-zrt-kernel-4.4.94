@@ -1,2 +1,5 @@
 config DT_T31_SWAN
 	bool "t31 swan"
+
+config DT_T31_PERSONALCAM
+	bool "t31x based Wyze Pan V3 clone"

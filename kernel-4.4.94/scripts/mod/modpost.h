@@ -17,7 +17,7 @@
 #undef ELF_R_SYM
 #undef ELF_R_TYPE
 
-#if KERNEL_ELFCLASS == ELFCLASS32
+#if 1 //KERNEL_ELFCLASS == ELFCLASS32
 
 #define Elf_Ehdr    Elf32_Ehdr
 #define Elf_Shdr    Elf32_Shdr
@@ -33,7 +33,7 @@
 #define ELF_R_SYM   ELF32_R_SYM
 #define ELF_R_TYPE  ELF32_R_TYPE
 #else
-
+#error aslkdnaslkdsalkdjasldihasldkhasnkldjhaskdjbsah
 #define Elf_Ehdr    Elf64_Ehdr
 #define Elf_Shdr    Elf64_Shdr
 #define Elf_Sym     Elf64_Sym

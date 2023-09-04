@@ -425,8 +425,10 @@ static int ingenic_i2s_platfrom_probe(struct platform_device *pdev)
 		return -ENOMEM;
 
 	ret = of_address_to_resource(parent, 0, &res);
-	if (ret)
+	if (ret) {
+		dev_err(&pdev->dev, "of_address_to_resource failed\n");
 		return ret;
+	}
 
 	ingenic_i2s->dma_base = res.start;
 	ingenic_i2s->aic = pdev->dev.parent;

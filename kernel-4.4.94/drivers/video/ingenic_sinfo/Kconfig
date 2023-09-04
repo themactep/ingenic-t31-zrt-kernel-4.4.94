@@ -1,0 +1,5 @@
+config INGENIC_SINFO
+	tristate "Ingenic Sensor Info"
+	default y
+	help
+	  Support for Ingenic Sensor Info (sinfo).

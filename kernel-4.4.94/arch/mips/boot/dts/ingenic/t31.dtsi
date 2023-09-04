@@ -201,6 +201,51 @@
 			};
 		};
 
+		aic: audio-controller@10020000 {
+			compatible = "ingenic,aic";
+			reg = <0x10020000 0x70>;
+
+			dmas = <&pdma INGENIC_DMA_TYPE(INGENIC_DMA_REQ_I2S0_RX)>, <&pdma INGENIC_DMA_TYPE(INGENIC_DMA_REQ_I2S0_TX)>;
+			dma-names = "rx", "tx";
+
+			interrupt-parent = <&core_intc>;
+			interrupts = <IRQ_AIC0>;
+
+			status = "disabled";
+
+			i2s0: ingenic-i2s {
+				compatible = "ingenic,i2s";
+
+				#sound-dai-cells = <0>;
+
+				status = "okay";
+			};
+		};
+
+		codec: audio-codec@10021000 {
+			compatible = "ingenic,t10-internal";
+			reg = <0x10021000 0x130>;
+
+			#sound-dai-cells = <0>;
+
+			status = "disabled";
+		};
+
+		dmic: audio-controller@10034000 {
+			compatible = "ingenic,dmic";
+			reg = <10034000 0x38>;
+
+			#sound-dai-cells = <0>;
+
+			dmas = <&pdma INGENIC_DMA_TYPE(INGENIC_DMA_REQ_DMIC_RX)>;
+			dma-names = "rx";
+
+			interrupt-parent = <&core_intc>;
+			interrupts = <IRQ_DMIC>;
+
+			status = "disabled";
+		};
+
 		uart0: serial@0x10030000 {
 			compatible = "ingenic,8250-uart";
 			reg = <0x10030000 0x1000>;

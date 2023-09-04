@@ -170,12 +170,16 @@ static int ingenic_aic_probe(struct platform_device *pdev)
 		return -ENOMEM;
 
 	ingenic_aic->clk_gate = devm_clk_get(&pdev->dev, "gate_aic");
-	if (IS_ERR(ingenic_aic->clk_gate))
+	if (IS_ERR(ingenic_aic->clk_gate)) {
+		dev_err(&pdev->dev, "gate_aic get clk fail\n");
 		return PTR_ERR(ingenic_aic->clk_gate);
+	}
 
-	ingenic_aic->clk = devm_clk_get(&pdev->dev, "cgu_i2s");
-	if (IS_ERR(ingenic_aic->clk))
+	ingenic_aic->clk = devm_clk_get(&pdev->dev, "mux_i2st");
+	if (IS_ERR(ingenic_aic->clk)) {
+		dev_err(&pdev->dev, "mux_i2st get clk fail\n");
 		return PTR_ERR(ingenic_aic->clk);
+	}
 	clk_set_rate(ingenic_aic->clk, INGENIC_I2S_RATE);
 
 	spin_lock_init(&ingenic_aic->mode_lock);
@@ -186,7 +190,7 @@ static int ingenic_aic_probe(struct platform_device *pdev)
 				ingenic_aic_irq_handler, ingenic_aic_irq_thread,
 				IRQF_SHARED , pdev->name, (void *)ingenic_aic);
 	if (!ret)
-		dev_info(&pdev->dev, "register aic irq\n");
+		dev_info(&pdev->dev, "register aic irq, ret %d, irqno is %d\n", ret, ingenic_aic->irqno);
 
 	platform_set_drvdata(pdev, (void *)ingenic_aic);
 
@@ -198,6 +202,7 @@ static int ingenic_aic_probe(struct platform_device *pdev)
 
 	ret = ingenic_dma_pcm_register(&pdev->dev, NULL);
 	if (ret) {
+		dev_err(&pdev->dev, "ingenic_dma_pcm_register fail %d\n", ret);
 		int i;
 		for (i = 0; i < ingenic_aic->subdevs; i++)
 			platform_device_unregister(ingenic_aic->psubdev[i]);

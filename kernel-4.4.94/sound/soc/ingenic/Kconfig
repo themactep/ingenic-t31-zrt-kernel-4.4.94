@@ -32,6 +32,9 @@ endchoice
 
 if SND_ASOC_INGENIC_AS_V1
 
+config SND_ASOC_INGENIC_T31_BOARD
+	tristate
+
 config SND_ASOC_INGENIC_X1000_BOARD
 	tristate
 
@@ -63,6 +66,10 @@ config SND_ASOC_INGENIC_ICDC_D3
 	select SND_ASOC_INGENIC_AIC
 	select SND_ASOC_INGENIC_INCODEC
 
+config SND_ASOC_INGENIC_INTERNAL_T10
+	tristate
+	select SND_ASOC_INGENIC_AIC
+
 config SND_ASOC_INGENIC_DUMP_CODEC
 	tristate
 
@@ -84,6 +91,21 @@ endif
 
 
 menu "Ingenic Board Type Select"
+choice
+	prompt "SOC t31 codec type select"
+	depends on SOC_T31
+	depends on SND_ASOC_INGENIC_AS_V1
+config SND_ASOC_INGENIC_T31_INTERNAL
+	bool "Audio support for t31 with internal codec"
+	select SND_ASOC_PDMA
+	select SND_ASOC_INGENIC_AIC_I2S
+	select SND_ASOC_INGENIC_INTERNAL_T10
+	select SND_ASOC_INGENIC_DMIC
+	select SND_ASOC_INGENIC_PCM
+	select SND_ASOC_INGENIC_DUMP_CODEC
+	select SND_ASOC_INGENIC_T31_BOARD
+endchoice
+
 choice
 	prompt "SOC x1000 codec type select"
 	depends on SOC_X1000

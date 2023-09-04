@@ -1,0 +1,292 @@
+/dts-v1/;
+
+#include <dt-bindings/input/input.h>
+#include "t31.dtsi"
+#include <dt-bindings/interrupt-controller/irq.h>
+#include <dt-bindings/leds/common.h>
+#include <dt-bindings/gpio/gpio.h>
+
+/ {
+	compatible = "generic,personalcam", "ingenic,t31";
+};
+
+&uart0 {
+	status = "disabled";
+};
+
+&uart1 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart1_pb>;
+};
+
+&uart2 {
+	status = "disabled";
+};
+
+&i2c0 {
+	pinctrl-0 = <&i2c0_pa>;
+	pinctrl-names = "default";
+	status = "okay";
+};
+
+&i2c1 {
+	pinctrl-0 = <&i2c1_pa>;
+	pinctrl-names = "default";
+	status = "okay";
+};
+
+&aic {
+	status = "okay";
+};
+
+&dmic {
+	status = "okay";
+};
+
+&codec {
+	status = "okay";
+};
+
+&cpufreq {
+	status = "okay";
+	operating-points = <
+		/*KHZ uV */
+		1200000	900000
+		750000	900000
+		600000	900000
+		500000	900000
+		400000	900000
+		375000	900000
+		300000	900000
+		200000	900000
+			>;
+
+};
+
+//&pwm {
+//	ingenic,pwm-outputs = <0>; /* <0 - 15> select which pwms are really used */
+//}
+
+&pdma {
+	status = "okay";
+};
+
+&msc0 {
+	status = "okay";
+	pinctrl-names = "default";
+
+	cap-mmc-highspeed;
+	cap-sd-highspeed;
+	max-frequency = <48000000>;
+	bus-width = <4>;
+	voltage-ranges = <3200 3400>;
+	cd-inverted;
+
+	ingenic,removal-removable = <1>;
+	/* special property */
+	ingenic,wp-gpios = <0>;
+	ingenic,cd-gpios = <&gpb 27 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+	ingenic,rst-gpios = <0>;
+	pinctrl-0 = <&msc0_pb>;
+};
+
+&msc1 {
+	status = "okay";
+	pinctrl-names = "default";
+	/*mmc-hs200-1_8v;*/
+	cap-mmc-highspeed;
+	max-frequency = <24000000>;
+	bus-width = <4>;
+	voltage-ranges = <2900 3100>;
+
+	//ingenic,sdio_clk = <24000000>;
+
+	ingenic,removal-dontcare = <1>;
+	/* special property */
+	//ingenic,sdio-reset = <&gpb 25 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+	ingenic,wp-gpios = <0>;
+	ingenic,rst-gpios = <0>;
+	pinctrl-0 = <&msc1_pb>;
+};
+
+&mac0 {
+	status = "disable";
+};
+
+&sfc {
+	status = "okay";
+    pinctrl-names = "default";
+	ingenic,sfc-max-frequency = <50000000>;
+	ingenic,use_board_info      = /bits/ 8 <0>;
+	ingenic,spiflash_param_offset = <0>;
+	pinctrl-0 = <&sfc_pa>;
+};
+
+&spi0 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&spi0_pc>;
+
+	spi-max-frequency = <48000000>;
+	num-cs = <2>;
+	cs-gpios = <0>, <0>;
+	ingenic,chnl = <0>;
+	ingenic,allow_cs_same = <1>;
+	ingenic,bus_num = <0>;
+	ingenic,has_dma_support = <1>;
+};
+
+&isp {
+	status = "okay";
+};
+
+&otg {
+	g-use-dma;
+	dr_mode = "otg";
+	status = "okay";
+};
+
+&otg_phy {
+	dr_mode = "otg";
+	compatible = "ingenic,innophy", "syscon";
+	ingenic,drvvbus-gpio = <&gpb 6 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+	status = "okay";
+};
+
+/ {
+	mmc0_gpio_enable: mmc0-dummy-fixed-reg {
+		status = "okay";
+		compatible = "regulator-fixed";
+
+		regulator-name = "mmc0-gpio-enable";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		regulator-boot-on;
+		regulator-always-on;
+
+		gpio = <&gpb 7 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+
+		startup-delay-us = <100000>;
+	};
+
+	mmc1_gpio_enable: mmc1-dummy-fixed-reg {
+		status = "okay";
+		compatible = "regulator-fixed";
+
+		regulator-name = "mmc1-gpio-enable";
+		regulator-min-microvolt = <1800000>;
+		regulator-max-microvolt = <1800000>;
+		regulator-boot-on;
+		regulator-always-on;
+		enable-active-high;
+
+		gpio = <&gpb 25 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+
+		startup-delay-us = <100000>;
+	};
+
+	leds-gpios {
+		compatible = "gpio-leds";
+		status = "okay";
+
+		yellow {
+			label = "led:yellow";
+			gpios = <&gpb 15 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+			linux,default-trigger = "heartbeat";
+		};
+
+		blue {
+			label = "led:blue";
+			gpios = <&gpb 16 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+			default-state = "on";
+		};
+
+		ir {
+			label = "led:ir";
+			gpios = <&gpa 14 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+			default-state = "off";
+		};
+	};
+
+	extclk: extclk {
+		clock-frequency = <24000000>;
+	};
+
+	gpio_keys: gpio_keys {
+		compatible = "gpio-keys";
+
+		bootsel0 {
+			label = "bootsel0";
+			linux,code = <KEY_HOME>;
+			gpios = <&gpc 0 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+		};
+
+		bootsel1 {
+			label = "bootsel1";
+			linux,code = <KEY_BACK>;
+			gpios = <&gpc 1 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+		};
+
+	};
+
+	dump_dmic_codec:dump_dmic_codec{
+		compatible = "ingenic,dmic-dump-codec";
+		status = "ok";
+	};
+	dump_spdif_codec:dump_spdif_codec{
+		compatible = "ingenic,spdif-dump-codec";
+		status = "ok";
+	};
+	dump_pcm_codec:dump_pcm_codec{
+		compatible = "ingenic,pcm-dump-codec";
+		status = "ok";
+	};
+
+	/*sound {
+		compatible = "simple-audio-card";
+
+		status = "okay";
+
+		simple-audio-card,name = "t31-sound-thing";
+		simple-audio-card,format = "i2s";
+
+		simple-audio-card,widgets =
+			"Speaker", "Speaker",
+			"Microphone", "Mic Buildin",
+			"Microphone", "DMic";
+		simple-audio-card,routing =
+			"Microphone", "DMic";
+		//simple-audio-card,pin-switches = "Speaker";
+
+		//simple-audio-card,hp-det-gpio = <&gpd 16 GPIO_ACTIVE_LOW>;
+		//simple-audio-card,aux-devs = <&amp>;
+
+		simple-audio-card,bitclock-master = <&dai_dmic_codec>;
+		simple-audio-card,frame-master = <&dai_dmic_codec>;
+
+		dai_cpu: simple-audio-card,cpu {
+			sound-dai = <&i2s0>;
+		};
+
+		dai_dmic_codec: simple-audio-card,codec {
+			sound-dai = <&dmic>;
+		};
+
+	};*/
+	sound_t31_internal_codec {
+		status = "ok";
+		compatible = "ingenic,t31-sound";
+		ingenic,model = "t31";
+
+		ingenic,dai-link = "i2s-icdc", "dmic";
+		ingenic,stream = "Playback", "Capture";
+		ingenic,cpu-dai = <&i2s0>, <&dmic>;
+		ingenic,platform = <&aic>, <&dmic>;
+		ingenic,codec = <&codec>, <&dump_dmic_codec>;
+		ingenic,codec-dai = "icdc-d3-hifi", "dmic-dump";
+		ingenic,audio-routing = "Speaker", "SPK",
+			"DMIC", "DMic";
+		//ingenic,spken-gpio = <&gpb 0 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+	};
+};
